@@ -1,16 +1,12 @@
-import { View, Text, Image } from "react-native";
 import React from "react";
+import { View, Text, Image } from "react-native";
 import { Tabs } from "expo-router";
-import { images } from "@/constant/images";
+import { icons } from "@/constant/icons";
 
 const TabIcon = ({ focused, icon, title }: { focused: boolean; icon: any; title: string }) => (
     <View className="flex-1 mt-3 flex flex-col items-center">
-        <Image source={icon} tintColor={focused ? "#0061ff" : "#666876"} resizeMode="contain" className="size-6" />
-        <Text
-            className={`${
-                focused ? "text-primary-300 font-rubik-medium" : "text-black-100 font-rubik"
-            } text-xs w-full text-center mt-1`}
-        >
+        <Image source={icon} tintColor={focused ? "#000000" : "#7f7f7f"} resizeMode="contain" className="size-6" />
+        <Text className={`${focused ? "text-black" : "text-primary-400"} text-xs w-full text-center mt-1`}>
             {title}
         </Text>
     </View>
@@ -35,7 +31,7 @@ const TabsLayout = () => {
                 options={{
                     title: "Home",
                     headerShown: false,
-                    tabBarIcon: ({ focused }) => <TabIcon icon={images.Logo} focused={focused} title="Home" />,
+                    tabBarIcon: ({ focused }) => <TabIcon icon={icons.HouseBlank} focused={focused} title="Home" />,
                 }}
             />
             <Tabs.Screen
@@ -43,7 +39,7 @@ const TabsLayout = () => {
                 options={{
                     title: "Community",
                     headerShown: false,
-                    tabBarIcon: ({ focused }) => <TabIcon icon={images.Logo} focused={focused} title="Community" />,
+                    tabBarIcon: ({ focused }) => <TabIcon icon={icons.Messages} focused={focused} title="Community" />,
                 }}
             />
             <Tabs.Screen
@@ -51,7 +47,7 @@ const TabsLayout = () => {
                 options={{
                     title: "Profile",
                     headerShown: false,
-                    tabBarIcon: ({ focused }) => <TabIcon icon={images.Logo} focused={focused} title="Profile" />,
+                    tabBarIcon: ({ focused }) => <TabIcon icon={icons.Profile} focused={focused} title="Profile" />,
                 }}
             />
         </Tabs>

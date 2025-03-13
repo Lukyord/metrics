@@ -6,15 +6,19 @@
 // F
 // G
 // H
+import HouseBlank from "@/assets/icons/house-blank.png";
 // I
 // J
 // K
 // L
-import Logo from "@/assets/images/icon.png";
+import Logout from "@/assets/icons/sign-out.png";
 // M
+import Messages from "@/assets/icons/messages.png";
+import Metrics from "@/assets/icons/metrics.png";
 // N
 // O
 // P
+import Profile from "@/assets/icons/user.png";
 // Q
 // R
 // S
@@ -26,7 +30,7 @@ import Logo from "@/assets/images/icon.png";
 // Y
 // Z
 
-export const images = {
+export const icons = {
     // A
     // B
     // C
@@ -35,15 +39,19 @@ export const images = {
     // F
     // G
     // H
+    HouseBlank,
     // I
     // J
     // K
     // L
-    Logo,
+    Logout,
     // M
+    Messages,
+    Metrics,
     // N
     // O
     // P
+    Profile,
     // Q
     // R
     // S
