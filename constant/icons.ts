@@ -5,6 +5,7 @@
 // E
 // F
 // G
+import Google from "@/assets/icons/google.png";
 // H
 import HouseBlank from "@/assets/icons/house-blank.png";
 // I
@@ -38,6 +39,7 @@ export const icons = {
     // E
     // F
     // G
+    Google,
     // H
     HouseBlank,
     // I
