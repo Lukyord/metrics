@@ -1,6 +1,8 @@
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 import "@/styles/global.css";
 import GlobalProvider from "@/context/global-provider";
@@ -24,8 +26,12 @@ export default function RootLayout() {
     if (!fontsLoaded) return null;
 
     return (
-        <GlobalProvider>
-            <Stack screenOptions={{ headerShown: false }} />
-        </GlobalProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+                <GlobalProvider>
+                    <Stack screenOptions={{ headerShown: false }} />
+                </GlobalProvider>
+            </BottomSheetModalProvider>
+        </GestureHandlerRootView>
     );
 }

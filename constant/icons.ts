@@ -19,6 +19,7 @@ import Metrics from "@/assets/icons/metrics.png";
 // N
 // O
 // P
+import Plus from "@/assets/icons/plus.png";
 import Profile from "@/assets/icons/user.png";
 // Q
 // R
@@ -53,6 +54,7 @@ export const icons = {
     // N
     // O
     // P
+    Plus,
     Profile,
     // Q
     // R

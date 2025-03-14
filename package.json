@@ -9,14 +9,14 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "test": "jest --watchAll",
-        "lint": "expo lint",
-        "icons:generate": "rm -rf ./components/icons && npx @svgr/cli --native --typescript --icon --out-dir ./components/icons ./assets/svg"
+        "lint": "expo lint"
     },
     "jest": {
         "preset": "jest-expo"
     },
     "dependencies": {
         "@expo/vector-icons": "^14.0.2",
+        "@gorhom/bottom-sheet": "^5.1.2",
         "@react-navigation/bottom-tabs": "^7.2.0",
         "@react-navigation/native": "^7.0.14",
         "expo": "~52.0.37",

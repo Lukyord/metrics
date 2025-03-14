@@ -4,6 +4,9 @@ import { Account, Avatars, Client, Databases } from "react-native-appwrite";
 export const config = {
     endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOTIN || "",
     projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID || "",
+    databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID || "",
+    metricsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_METRICS_COLLECTION_ID || "",
+    subGoalsCollectionId: process.env.EXPO_PUBLIC_APPWRITE_SUBGOALS_COLLECTION_ID || "",
 };
 
 export const client = new Client();
@@ -21,3 +24,4 @@ switch (Platform.OS) {
 
 export const avatar = new Avatars(client);
 export const account = new Account(client);
+export const database = new Databases(client);
