@@ -1,4 +1,4 @@
 export type MetricAppwrite = {
     name: string;
-    userId: string;
+    user_id: string;
 };

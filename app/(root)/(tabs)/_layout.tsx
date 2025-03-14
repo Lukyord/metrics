@@ -31,15 +31,15 @@ const TabsLayout = () => {
                 name="index"
                 options={{
                     title: "Home",
-                    // headerShown: false,
-                    tabBarIcon: ({ focused }) => <TabIcon icon={icons.HouseBlank} focused={focused} title="Home" />,
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => <TabIcon icon={icons.HouseBlank} focused={focused} title="Metrics" />,
                 }}
             />
             <Tabs.Screen
                 name="community"
                 options={{
                     title: "Community",
-                    // headerShown: false,
+                    headerShown: false,
                     tabBarIcon: ({ focused }) => <TabIcon icon={icons.Messages} focused={focused} title="Community" />,
                 }}
             />
@@ -47,7 +47,7 @@ const TabsLayout = () => {
                 name="profile"
                 options={{
                     title: "Profile",
-                    // headerShown: false,
+                    headerShown: false,
                     tabBarIcon: ({ focused }) => <TabIcon icon={icons.Profile} focused={focused} title="Profile" />,
                 }}
             />
