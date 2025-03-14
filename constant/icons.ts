@@ -25,6 +25,8 @@ import Profile from "@/assets/icons/user.png";
 // R
 // S
 // T
+import TriangleDown from "@/assets/icons/triangle-down.png";
+import TriangleUp from "@/assets/icons/triangle-up.png";
 // U
 // V
 // W
@@ -60,6 +62,8 @@ export const icons = {
     // R
     // S
     // T
+    TriangleDown,
+    TriangleUp,
     // U
     // V
     // W

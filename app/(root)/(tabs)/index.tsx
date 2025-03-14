@@ -15,15 +15,18 @@ import {
 import { icons } from "@/constant/icons";
 import { metricsService } from "@/services/metrics";
 import CreateMetricButton from "@/components/metrics/CreateMetricButton";
-import CreateMetricButtomSheetModal from "@/components/metrics/CreateMetricButtomSheet";
+import MetricButtomSheetModal from "@/components/metrics/MetricButtomSheetModal";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useAppwrite } from "@/hooks/useAppwrite";
 import { useGlobalContext } from "@/context/global-provider";
 import NoResult from "@/components/ui/NoResult";
+import MetricItem from "@/components/metrics/MetricItem";
+import { Models } from "react-native-appwrite";
 
 const Metrics = () => {
     const { user } = useGlobalContext();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    const [editingMetric, setEditingMetric] = useState<Models.Document | null>(null);
 
     const {
         data: metrics,
@@ -35,6 +38,20 @@ const Metrics = () => {
             userId: user?.$id ?? "",
         },
     });
+
+    const handleMetricDeleted = () => {
+        metricsRefetch({ userId: user?.$id ?? "" });
+    };
+
+    const handleMetricSaved = () => {
+        metricsRefetch({ userId: user?.$id ?? "" });
+        setEditingMetric(null);
+    };
+
+    const handleEditMetric = (metric: Models.Document) => {
+        setEditingMetric(metric);
+        bottomSheetModalRef.current?.present();
+    };
 
     return (
         <SafeAreaView className="flex-1 bg-primary-100 relative p-5">
@@ -56,17 +73,16 @@ const Metrics = () => {
                     )
                 }
                 renderItem={({ item }) => (
-                    <View className="bg-gray-700 px-4 py-4 rounded-lg mt-2">
-                        <Text className="text-xl font-dm-sans-bold text-white">{item.name}</Text>
-                    </View>
+                    <MetricItem item={item} onDelete={handleMetricDeleted} onEdit={() => handleEditMetric(item)} />
                 )}
             />
 
             {/* Create Metric */}
             <CreateMetricButton onPress={() => bottomSheetModalRef.current?.present()} />
-            <CreateMetricButtomSheetModal
+            <MetricButtomSheetModal
                 ref={bottomSheetModalRef}
-                onMetricCreated={() => metricsRefetch({ userId: user?.$id ?? "" })}
+                editMetric={editingMetric}
+                onMetricCreated={handleMetricSaved}
             />
         </SafeAreaView>
     );

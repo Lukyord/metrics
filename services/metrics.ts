@@ -1,5 +1,5 @@
 import { config, database } from "@/services/appwrite";
-import { MetricAppwrite } from "@/types/metrics";
+import { MetricAppwrite } from "@/types/metrics-type";
 import { AppwriteException, ID, Query } from "react-native-appwrite";
 
 export const metricsService = {
@@ -27,6 +27,29 @@ export const metricsService = {
         } catch (error) {
             console.error("Error getting metrics at metricsService: ", error);
             return [];
+        }
+    },
+    async delete({ documentId }: { documentId: string }) {
+        try {
+            const result = await database.deleteDocument(config.databaseId, config.metricsCollectionId, documentId);
+            return { success: true };
+        } catch (error) {
+            console.error("Error deleting metric at metricsService: ", error);
+            return { error };
+        }
+    },
+    async update({ documentId, data }: { documentId: string; data: Partial<MetricAppwrite> }) {
+        try {
+            const result = await database.updateDocument(
+                config.databaseId,
+                config.metricsCollectionId,
+                documentId,
+                data
+            );
+            return result;
+        } catch (error) {
+            console.error("Error updating metric at metricsService: ", error);
+            return { error };
         }
     },
 };
