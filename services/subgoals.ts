@@ -1,46 +1,59 @@
 import { config, database } from "@/services/appwrite";
-import { MetricAppwrite } from "@/types/metrics-type";
+import { SubgoalAppwrite } from "@/types/metrics-type";
 import { ID, Query } from "react-native-appwrite";
 
-export const metricsService = {
-    async create({ data }: { data: MetricAppwrite }) {
+export const subgoalsService = {
+    async create({ data }: { data: SubgoalAppwrite }) {
         try {
             const result = await database.createDocument(
                 config.databaseId,
-                config.metricsCollectionId,
+                config.subGoalsCollectionId,
                 ID.unique(),
                 data
             );
             return result;
         } catch (error) {
-            console.error("Error creating metric at metricsService: ", error);
+            console.error("Error creating subgoal at subgoalsService: ", error);
             return { error: error };
         }
     },
-    async get({ userId }: { userId: string }) {
+    async get({ metricId }: { metricId: string }) {
         try {
             const result = await database.listDocuments(
                 config.databaseId,
-                config.metricsCollectionId,
-                [Query.equal("user_id", userId)]
+                config.subGoalsCollectionId,
+                [Query.equal("metric_id", metricId)]
             );
 
             return result.documents;
         } catch (error) {
-            console.error("Error getting metrics at metricsService: ", error);
+            console.error("Error getting subgoals at subgoalsService: ", error);
             return [];
+        }
+    },
+    async getSubgoal({ documentId }: { documentId: string }) {
+        try {
+            const result = await database.getDocument(
+                config.databaseId,
+                config.subGoalsCollectionId,
+                documentId
+            );
+            return result;
+        } catch (error) {
+            console.error("Error getting subgoal at subgoalsService: ", error);
+            return { error };
         }
     },
     async delete({ documentId }: { documentId: string }) {
         try {
             const result = await database.deleteDocument(
                 config.databaseId,
-                config.metricsCollectionId,
+                config.subGoalsCollectionId,
                 documentId
             );
             return { success: true };
         } catch (error) {
-            console.error("Error deleting metric at metricsService: ", error);
+            console.error("Error deleting subgoal at subgoalsService: ", error);
             return { error };
         }
     },
@@ -49,18 +62,18 @@ export const metricsService = {
         data,
     }: {
         documentId: string;
-        data: Partial<MetricAppwrite>;
+        data: Partial<SubgoalAppwrite>;
     }) {
         try {
             const result = await database.updateDocument(
                 config.databaseId,
-                config.metricsCollectionId,
+                config.subGoalsCollectionId,
                 documentId,
                 data
             );
             return result;
         } catch (error) {
-            console.error("Error updating metric at metricsService: ", error);
+            console.error("Error updating subgoal at subgoalsService: ", error);
             return { error };
         }
     },

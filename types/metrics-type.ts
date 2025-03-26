@@ -8,6 +8,13 @@ export type Metric = MetricAppwrite & {
     subgoals: Subgoal[];
 };
 
+export type SubgoalAppwrite = {
+    name: string;
+    metrics: string;
+    progress: number;
+    unit: string;
+};
+
 export type Subgoal = {
     name: string;
     progress: number;

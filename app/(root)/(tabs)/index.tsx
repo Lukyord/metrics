@@ -1,24 +1,12 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from "react";
+import React, { useRef, useState } from "react";
 import {
     View,
     Text,
     SafeAreaView,
-    ScrollView,
-    TouchableOpacity,
-    Image,
-    StyleSheet,
-    Button,
     FlatList,
     ActivityIndicator,
 } from "react-native";
 
-import { icons } from "@/constant/icons";
 import { metricsService } from "@/services/metrics";
 import CreateMetricButton from "@/components/metrics/CreateMetricButton";
 import MetricButtomSheetModal from "@/components/metrics/MetricButtomSheetModal";
@@ -47,10 +35,6 @@ const Metrics = () => {
         },
     });
 
-    const handleMetricDeleted = () => {
-        metricsRefetch({ userId: user?.$id ?? "" });
-    };
-
     const handleMetricSaved = () => {
         metricsRefetch({ userId: user?.$id ?? "" });
         setEditingMetric(null);
@@ -60,6 +44,14 @@ const Metrics = () => {
         setEditingMetric(metric);
         bottomSheetModalRef.current?.present();
     };
+
+    if (metricsLoading) {
+        return (
+            <View className="flex-1 justify-center items-center">
+                <ActivityIndicator size="large" color="#000" />
+            </View>
+        );
+    }
 
     return (
         <SafeAreaView className="flex-1 bg-primary-100 relative p-5">
@@ -88,8 +80,10 @@ const Metrics = () => {
                 renderItem={({ item }) => (
                     <MetricItem
                         item={item}
-                        onDelete={handleMetricDeleted}
                         onEdit={() => handleEditMetric(item)}
+                        refetch={() =>
+                            metricsRefetch({ userId: user?.$id ?? "" })
+                        }
                     />
                 )}
             />
