@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import {
     View,
     Text,
@@ -26,7 +32,9 @@ import { Models } from "react-native-appwrite";
 const Metrics = () => {
     const { user } = useGlobalContext();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const [editingMetric, setEditingMetric] = useState<Models.Document | null>(null);
+    const [editingMetric, setEditingMetric] = useState<Models.Document | null>(
+        null
+    );
 
     const {
         data: metrics,
@@ -62,26 +70,38 @@ const Metrics = () => {
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
                     <View className="flex flex-col gap-5 items-center my-4">
-                        <Text className="text-2xl font-dm-sans-bold">Metrics</Text>
+                        <Text className="text-2xl font-dm-sans-bold">
+                            Metrics
+                        </Text>
                     </View>
                 }
                 ListEmptyComponent={
                     metricsLoading ? (
-                        <ActivityIndicator size="large" className="color-primary-300 mt-5 w-full mx-auto" />
+                        <ActivityIndicator
+                            size="large"
+                            className="color-primary-300 mt-5 w-full mx-auto"
+                        />
                     ) : (
                         <NoResult />
                     )
                 }
                 renderItem={({ item }) => (
-                    <MetricItem item={item} onDelete={handleMetricDeleted} onEdit={() => handleEditMetric(item)} />
+                    <MetricItem
+                        item={item}
+                        onDelete={handleMetricDeleted}
+                        onEdit={() => handleEditMetric(item)}
+                    />
                 )}
             />
 
             {/* Create Metric */}
-            <CreateMetricButton onPress={() => bottomSheetModalRef.current?.present()} />
+            <CreateMetricButton
+                onPress={() => bottomSheetModalRef.current?.present()}
+            />
             <MetricButtomSheetModal
                 ref={bottomSheetModalRef}
                 editMetric={editingMetric}
+                setEditingMetric={setEditingMetric}
                 onMetricCreated={handleMetricSaved}
             />
         </SafeAreaView>
