@@ -6,7 +6,6 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
-    useRef,
     useState,
 } from "react";
 import {
@@ -18,8 +17,9 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { metricsService } from "@/services/metrics";
 import { useGlobalContext } from "@/context/global-provider";
-import { MetricAppwrite } from "@/types/metrics-type";
+import { MetricAppwrite, StreakType } from "@/types/metrics-type";
 import { Models } from "react-native-appwrite";
+import { Picker } from "@react-native-picker/picker";
 
 type MetricButtomSheetModalProps = {
     onMetricCreated: () => void;
@@ -33,6 +33,7 @@ const MetricButtomSheetModal = forwardRef<
 >(({ onMetricCreated, editMetric, setEditingMetric }, ref) => {
     const { user } = useGlobalContext();
     const [metricName, setMetricName] = useState("");
+    const [streakType, setStreakType] = useState<StreakType | null>(null);
     const snapPoints = useMemo(() => ["50%", "75%"], []);
     const renderBackdrop = useCallback(
         (props: any) => (
@@ -51,12 +52,20 @@ const MetricButtomSheetModal = forwardRef<
         if (editMetric) {
             response = await metricsService.update({
                 documentId: editMetric.$id,
-                data: { name: metricName },
+                data: {
+                    name: metricName,
+                    streak_type: streakType,
+                },
             });
         } else {
             const metric: MetricAppwrite = {
                 name: metricName,
                 user_id: user?.$id ?? "",
+                streak_type: streakType,
+                current_streak: 0,
+                longest_streak: 0,
+                last_completed_date: new Date(),
+                completion_history: "[]",
             };
             response = await metricsService.create({ data: metric });
         }
@@ -72,6 +81,7 @@ const MetricButtomSheetModal = forwardRef<
 
         onMetricCreated();
         setMetricName("");
+        setStreakType(null);
 
         return { data: response };
     };
@@ -79,8 +89,10 @@ const MetricButtomSheetModal = forwardRef<
     useEffect(() => {
         if (editMetric) {
             setMetricName(editMetric.name);
+            setStreakType(editMetric.streak_type || null);
         } else {
             setMetricName("");
+            setStreakType(null);
         }
     }, [editMetric]);
 
@@ -106,6 +118,23 @@ const MetricButtomSheetModal = forwardRef<
                         onChangeText={(text) => setMetricName(text)}
                         className="border border-gray-300 rounded-md p-2 mt-2"
                     />
+                </View>
+                <View className="w-full">
+                    <Text className="font-dms-medium">Streak Type</Text>
+                    <View className="border border-gray-300 rounded-md mt-2">
+                        <Picker
+                            selectedValue={streakType}
+                            onValueChange={(value) => setStreakType(value)}
+                            style={{ color: "#000" }}
+                            mode="dropdown"
+                        >
+                            <Picker.Item label="No Streak" value="no-streak" />
+                            <Picker.Item label="Daily" value="daily" />
+                            <Picker.Item label="Weekly" value="weekly" />
+                            <Picker.Item label="Monthly" value="monthly" />
+                            <Picker.Item label="Annually" value="annually" />
+                        </Picker>
+                    </View>
                 </View>
                 <TouchableOpacity
                     className="bg-black rounded-md px-6 py-2"
