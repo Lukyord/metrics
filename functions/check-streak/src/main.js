@@ -19,13 +19,13 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   try {
-    // Get all metrics with streaks using correct Query syntax
+    // Get all metrics with valid streak types (excluding "no-streak")
     const metrics = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_METRICS_COLLECTION_ID,
         [
-            Query.isNotNull('streak_type'),
-            Query.notEqual('streak_type', null)
+            Query.notEqual('streak_type', 'no-streak'),
+            Query.isNotEqual('streak_type', '') // handle empty string case
         ]
     );
 
