@@ -1,4 +1,4 @@
-import { Client, Databases } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 const getWeekNumber = (date) => {
     const d = new Date(date);
@@ -19,16 +19,17 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   try {
-    // Get all metrics with streaks
+    // Get all metrics with streaks using correct Query syntax
     const metrics = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_METRICS_COLLECTION_ID,
         [
-            // Query.notEqual is not directly available in node-appwrite
-            // Using a large limit to ensure we get all documents
-            { notEqual: ['streak_type', 'no-streak'] }
+            Query.isNotNull('streak_type'),
+            Query.notEqual('streak_type', null)
         ]
     );
+
+    log(`Found ${metrics.documents.length} metrics to check`);
 
     const today = new Date();
     const updates = metrics.documents.map(async (metric) => {
