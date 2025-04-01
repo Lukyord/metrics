@@ -25,7 +25,7 @@ export default async ({ req, res, log, error }) => {
         process.env.APPWRITE_METRICS_COLLECTION_ID,
         [
             Query.notEqual('streak_type', 'no-streak'),
-            Query.isNotEqual('streak_type', '') // handle empty string case
+            Query.notEqual('streak_type', '')
         ]
     );
 
