@@ -66,7 +66,7 @@ export const calculateStreak = (
     }
 };
 
-const getWeekNumber = (date: Date): number => {
+export const getWeekNumber = (date: Date): number => {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
     d.setDate(d.getDate() + 4 - (d.getDay() || 7));

@@ -1,4 +1,4 @@
-import { calculateStreak } from "@/lib/metrics";
+import { calculateStreak, getWeekNumber } from "@/lib/metrics";
 import { config, database } from "@/services/appwrite";
 import { MetricAppwrite, StreakType } from "@/types/metrics-type";
 import { ID, Query } from "react-native-appwrite";
@@ -118,6 +118,76 @@ export const metricsService = {
                 "Error recording completion at metricsService: ",
                 error
             );
+            return { error };
+        }
+    },
+    async checkAndUpdateStreaks() {
+        try {
+            // Get all metrics with streaks
+            const metrics = await database.listDocuments(
+                config.databaseId,
+                config.metricsCollectionId,
+                [Query.notEqual("streak_type", "no-streak")]
+            );
+
+            const today = new Date();
+            const updates = metrics.documents.map(async (metric) => {
+                const lastCompletedDate = new Date(metric.last_completed_date);
+                const streakType = metric.streak_type as StreakType;
+
+                // Calculate if streak should be maintained
+                const shouldMaintainStreak = (() => {
+                    switch (streakType) {
+                        case "daily": {
+                            const diffInDays = Math.floor(
+                                (today.getTime() -
+                                    lastCompletedDate.getTime()) /
+                                    (1000 * 60 * 60 * 24)
+                            );
+                            return diffInDays <= 1;
+                        }
+                        case "weekly": {
+                            const weekDiff =
+                                getWeekNumber(today) -
+                                getWeekNumber(lastCompletedDate);
+                            return weekDiff <= 1;
+                        }
+                        case "monthly": {
+                            const thisMonth =
+                                today.getMonth() + today.getFullYear() * 12;
+                            const lastMonth =
+                                lastCompletedDate.getMonth() +
+                                lastCompletedDate.getFullYear() * 12;
+                            return thisMonth - lastMonth <= 1;
+                        }
+                        case "annually": {
+                            const yearDiff =
+                                today.getFullYear() -
+                                lastCompletedDate.getFullYear();
+                            return yearDiff <= 1;
+                        }
+                        default:
+                            return false;
+                    }
+                })();
+
+                // If streak should not be maintained, reset it to 0
+                if (!shouldMaintainStreak) {
+                    return database.updateDocument(
+                        config.databaseId,
+                        config.metricsCollectionId,
+                        metric.$id,
+                        {
+                            current_streak: 0,
+                        }
+                    );
+                }
+            });
+
+            await Promise.all(updates.filter(Boolean));
+            return { success: true };
+        } catch (error) {
+            console.error("Error checking streaks at metricsService: ", error);
             return { error };
         }
     },
