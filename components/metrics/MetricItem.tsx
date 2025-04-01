@@ -1,12 +1,4 @@
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    Image,
-    Alert,
-    FlatList,
-    ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Models } from "react-native-appwrite";
 import Animated, {
@@ -24,9 +16,9 @@ import SubGoalBottomSheetModal from "./SubGoalBottomSheetModal";
 import StreakInfo from "@/components/metrics/MetricItem/StreakInfo";
 import MetricActionFooter from "./MetricItem/MetricItemActionFooter";
 import SubgoalItem from "./MetricItem/SubGoalItem";
-import MetricHeader from "./MetricItem/MetricHeader";
 import EmptySubGoal from "./MetricItem/EmptySubGoal";
 import { useMetricActions } from "@/hooks/useMetricActions";
+import { icons } from "@/constant/icons";
 
 type MetricItemProps = {
     item: Models.Document;
@@ -82,14 +74,36 @@ const MetricItem = ({ item, onEdit, refetch }: MetricItemProps) => {
 
     return (
         <View className="bg-gray-700 px-4 py-2 rounded-xl mt-2 overflow-hidden">
-            <MetricHeader
-                heightValue={heightValue}
-                open={open}
-                metricItemRef={metricItemRef}
-                iconStyle={iconStyle}
-                onPress={() => {}}
-                item={metricItem}
-            />
+            <TouchableOpacity
+                onPress={() => {
+                    runOnUI(() => {
+                        "worklet";
+                        open.value = !open.value;
+                        if (open.value) {
+                            heightValue.value = withTiming(
+                                measure(metricItemRef)!.height
+                            );
+                        } else {
+                            heightValue.value = withTiming(0);
+                        }
+                    })();
+                }}
+            >
+                <View className="flex flex-row items-center justify-between gap-4 p-3 h-[50px]">
+                    <View className="flex flex-row gap-4 items-center">
+                        <Text className="text-xl font-dm-sans-bold text-white">
+                            {item.name}
+                        </Text>
+                    </View>
+                    <Animated.View style={iconStyle}>
+                        <Image
+                            source={icons.TriangleDown}
+                            className="w-4 h-4"
+                            tintColor="#fff"
+                        />
+                    </Animated.View>
+                </View>
+            </TouchableOpacity>
 
             <Animated.View style={heightAnimationStyle}>
                 <Animated.View
